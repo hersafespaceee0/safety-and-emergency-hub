@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Safety & Emergency Hub</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
     <!-- Header -->
@@ -15,20 +15,50 @@
           <div class="logo">SafeHub</div>
 
           <!-- Nav Links -->
-          <nav class="nav-links" id="navMenu">
-            <button class="close-menu" onclick="toggleMenu()">X</button>
+          <nav class="nav-links" id="nav-menu">
+            <button class="close-menu" id="close-menu">X</button>
             <a href="/alerts.html">Alerts</a>
             <a href="/tips.html">Safety Tips</a>
             <a href="/contacts.html">Contact Us</a>
             <a href="/volunteer.html">Volunteers</a>
+            <!-- Auth Buttons -->
+            <div class="auth-buttons-mobile">
+              <% if (session && session.user) { %>
+              <span class="welcome-msg"
+                >Welcome, <%= session.user.username %></span
+              >
+              <form action="/logout" method="POST" style="display: inline">
+                <button class="btn-outline">Log Out</button>
+              </form>
+              <% } else { %>
+              <button class="btn-outline" onclick="openModal('loginModal')">
+                Log In
+              </button>
+              <button class="btn-fill" onclick="openModal('signupModal')">
+                Sign Up
+              </button>
+              <% } %>
+            </div>
           </nav>
-
-          <!-- Auth Buttons -->
           <div class="auth-buttons">
-            <button class="btn-outline">Log In</button>
-            <button class="btn-fill">Sign Up</button>
+            <% if (session && session.user) { %>
+            <span class="welcome-msg"
+              >Welcome, <%= session.user.username %></span
+            >
+            <form action="/logout" method="POST" style="display: inline">
+              <button class="btn-outline">Log Out</button>
+            </form>
+            <% } else { %>
+            <button class="btn-outline" onclick="openLoginModal()">
+              Log In
+            </button>
+            <button class="btn-fill" onclick="openSignupModal()">
+              Sign Up
+            </button>
+            <% } %>
           </div>
-          <button class="menu-toggle">☰</button>
+
+          <button class="menu-toggle" id="menu-toggle">☰</button>
         </div>
       </header>
 
@@ -46,23 +76,36 @@
         <section class="section alerts">
           <h2>🚨 Latest Alerts</h2>
           <div class="alerts-grid">
+            <% if (alerts && alerts.length > 0) { %> <% alerts.forEach(alert =>
+            { %>
             <div class="alert">
-              🔥 Fire outbreak reported in Kibera – Apr 23, 09:00 AM
+              <strong><%= alert.title %></strong> – <%= alert.description %> <%
+              if (alert.severity) { %>
+              <span
+                class="severity"
+                style="color: <%= alert.severity === 'high' ? 'red' : alert.severity === 'medium' ? 'orange' : 'yellow' %>;"
+              >
+                (<%= alert.severity %>)
+              </span>
+              <% } %>
             </div>
-            <div class="alert">🌊 Flash floods expected in Kisumu – Apr 24</div>
-            <div class="alert">
-              🚧 Road blockage in Thika – Apr 23, 11:30 AM
-            </div>
+            <% }) %> <% } else { %>
+            <div class="alert">No active alerts at this time.</div>
+            <% } %>
           </div>
         </section>
 
         <section class="section contacts">
           <h2>📞 Emergency Contacts</h2>
           <div class="contacts-grid">
-            <div class="contact-card">🚓 Police: 999</div>
-            <div class="contact-card">🚑 Ambulance: 911</div>
-            <div class="contact-card">🔥 Fire Service: 112</div>
-            <div class="contact-card">📞 Red Cross: 1199</div>
+            <% if (contacts && contacts.length > 0) { %> <%
+            contacts.forEach(contact => { %>
+            <div class="contact-card">
+              <%= contact.service_name %>: <%= contact.phone_number %>
+            </div>
+            <% }) %> <% } else { %>
+            <div class="contact-card">No contacts available.</div>
+            <% } %>
           </div>
         </section>
 
@@ -76,16 +119,53 @@
 
         <section class="section tips">
           <h2>💡 Safety Tip of the Day</h2>
-          <p>
-            In case of a fire, stay low to avoid smoke and never use elevators
-            to evacuate.
-          </p>
+          <% if (tip && tip.title) { %>
+          <p><strong><%= tip.title %></strong>: <%= tip.description %></p>
+          <% } else { %>
+          <p>No safety tips available.</p>
+          <% } %>
         </section>
       </main>
+    </div>
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('loginModal')">&times;</span>
+        <h2>Login</h2>
+        <form action="/login" method="POST">
+          <input type="email" name="email" placeholder="Email" required />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+          />
+          <button type="submit">Log In</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Sign Up Modal -->
+    <div id="signupModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal('signupModal')">&times;</span>
+        <h2>Sign Up</h2>
+        <form action="/signup" method="POST">
+          <input type="text" name="username" placeholder="Full Name" required />
+          <input type="email" name="email" placeholder="Email" required />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            required
+          />
+          <button type="submit">Sign Up</button>
+        </form>
+      </div>
     </div>
     <footer class="footer">
       <p>© 2025 SafeHub. All rights reserved.</p>
     </footer>
-    <script src="script.js"></script>
+    <script src="/js/script.js"></script>
   </body>
 </html>

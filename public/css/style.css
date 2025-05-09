@@ -12,7 +12,7 @@ html {
   color: white;
 }
 .hero-bg {
-  background: url(./background\ img1.jpg) no-repeat center center/cover;
+  background: url(/images/background\ img1.jpg) no-repeat center center/cover;
 
   position: relative;
 }
@@ -155,6 +155,9 @@ html {
   color: white;
   z-index: 1001; /* ensures it's above overlay or other elements */
 }
+.close-menu {
+  display: none;
+}
 main {
   display: flex;
   flex-direction: column;
@@ -231,6 +234,58 @@ main {
   background: #fff3e057;
   border-left: 4px solid #388e3c;
 }
+/* signup/login modals */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+}
+
+.modal .close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.modal button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+/* welcome text */
+.welcome-msg {
+  color: #fff;
+  margin-right: 10px;
+  font-weight: bold;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -252,9 +307,16 @@ main {
   }
   .nav-links.active {
     right: 0;
+    display: flex;
   }
 
   .menu-toggle {
+    position: relative;
+    z-index: 1001;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
     display: block;
   }
 
@@ -285,13 +347,16 @@ main {
   }
 
   .close-menu {
-    align-self: flex-end;
+    position: absolute;
+    top: 10px;
+    right: 10px;
     background: none;
     border: none;
     color: white;
     font-size: 1.5rem;
     cursor: pointer;
     margin-bottom: 1rem;
+    z-index: 1001;
   }
 
   .close-menu:hover {
