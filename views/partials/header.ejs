@@ -1,0 +1,39 @@
+<header class="header">
+  <div class="container">
+    <div class="logo">SafeHub</div>
+    <nav class="nav-links" id="nav-menu">
+      <button
+        class="close-menu"
+        id="close-menu"
+        aria-label="Close navigation menu"
+      >
+        X
+      </button>
+      <div class="nav-items">
+        <a href="/alerts">Alerts</a>
+        <a href="/tips">Safety Tips</a>
+        <a href="/contacts">Contact Us</a>
+        <a href="/volunteer">Volunteers</a>
+      </div>
+      <div class="auth-buttons">
+        <% if (session && session.user) { %>
+        <span class="welcome-msg">Welcome, <%= session.user.username %></span>
+        <form action="/logout" method="POST" style="display: inline">
+          <button class="btn-outline">Log Out</button>
+        </form>
+        <% } else { %>
+        <button class="btn-outline" onclick="openLoginModal()">Log In</button>
+        <button class="btn-fill" onclick="openSignupModal()">Sign Up</button>
+        <% } %>
+      </div>
+    </nav>
+    <button
+      class="menu-toggle"
+      id="menu-toggle"
+      aria-label="Open navigation menu"
+      aria-expanded="false"
+    >
+      ☰
+    </button>
+  </div>
+</header>

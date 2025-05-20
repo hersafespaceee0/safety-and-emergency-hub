@@ -9,58 +9,7 @@
   <body>
     <!-- Header -->
     <div class="hero-bg">
-      <header class="header">
-        <div class="container">
-          <!-- Logo -->
-          <div class="logo">SafeHub</div>
-
-          <!-- Nav Links -->
-          <nav class="nav-links" id="nav-menu">
-            <button class="close-menu" id="close-menu">X</button>
-            <a href="/alerts.html">Alerts</a>
-            <a href="/tips.html">Safety Tips</a>
-            <a href="/contacts.html">Contact Us</a>
-            <a href="/volunteer.html">Volunteers</a>
-            <!-- Auth Buttons -->
-            <div class="auth-buttons-mobile">
-              <% if (session && session.user) { %>
-              <span class="welcome-msg"
-                >Welcome, <%= session.user.username %></span
-              >
-              <form action="/logout" method="POST" style="display: inline">
-                <button class="btn-outline">Log Out</button>
-              </form>
-              <% } else { %>
-              <button class="btn-outline" onclick="openModal('loginModal')">
-                Log In
-              </button>
-              <button class="btn-fill" onclick="openModal('signupModal')">
-                Sign Up
-              </button>
-              <% } %>
-            </div>
-          </nav>
-          <div class="auth-buttons">
-            <% if (session && session.user) { %>
-            <span class="welcome-msg"
-              >Welcome, <%= session.user.username %></span
-            >
-            <form action="/logout" method="POST" style="display: inline">
-              <button class="btn-outline">Log Out</button>
-            </form>
-            <% } else { %>
-            <button class="btn-outline" onclick="openLoginModal()">
-              Log In
-            </button>
-            <button class="btn-fill" onclick="openSignupModal()">
-              Sign Up
-            </button>
-            <% } %>
-          </div>
-
-          <button class="menu-toggle" id="menu-toggle">☰</button>
-        </div>
-      </header>
+      <%- include('partials/header') %>
 
       <!-- Landing Section -->
       <section class="landing">
