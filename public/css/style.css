@@ -123,8 +123,7 @@ html {
   justify-content: center;
   align-items: center;
   text-align: center;
-  min-height: 100vh;
-  padding-top: -80px;
+  height: 80vh;
 }
 
 .landing-text h1 {
@@ -177,7 +176,13 @@ main {
   text-align: center;
   margin-bottom: 1.5rem;
 }
-
+.section-alerts {
+  padding-top: -20px;
+}
+.section-alerts h2 {
+  padding-left: 350px;
+  padding-bottom: 30px;
+}
 /* Alerts side by side */
 .alerts-grid {
   display: flex;

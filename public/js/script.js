@@ -3,27 +3,48 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeMenu = document.getElementById("close-menu");
   const navMenu = document.getElementById("nav-menu");
 
-  menuToggle.addEventListener("click", () => {
-    navMenu.classList.add("active");
-  });
+  if (menuToggle && closeMenu && navMenu) {
+    menuToggle.addEventListener("click", () => {
+      navMenu.classList.add("active");
+      menuToggle.setAttribute("aria-expanded", "true");
+    });
 
-  closeMenu.addEventListener("click", () => {
-    console.log("Close button clicked");
-    navMenu.classList.remove("active");
-  });
+    closeMenu.addEventListener("click", () => {
+      navMenu.classList.remove("active");
+      menuToggle.setAttribute("aria-expanded", "false");
+    });
+
+    document
+      .querySelectorAll(".nav-items a, .auth-buttons button")
+      .forEach((item) => {
+        item.addEventListener("click", () => {
+          navMenu.classList.remove("active");
+          menuToggle.setAttribute("aria-expanded", "false");
+        });
+      });
+  }
 });
-//sign up/login in modal
+
 function openModal(id) {
-  document.getElementById(id).style.display = "flex";
+  const modal = document.getElementById(id);
+  if (modal) {
+    modal.style.display = "flex";
+  } else {
+    window.location.href = "/"; // Redirect to homepage if modal not found
+  }
 }
 
 function closeModal(id) {
-  document.getElementById(id).style.display = "none";
+  const modal = document.getElementById(id);
+  if (modal) {
+    modal.style.display = "none";
+  }
 }
-// Optional: Close when clicking outside the modal
-window.onclick = function (event) {
-  const login = document.getElementById("loginModal");
-  const signup = document.getElementById("signupModal");
-  if (event.target === login) login.style.display = "none";
-  if (event.target === signup) signup.style.display = "none";
-};
+
+function openLoginModal() {
+  openModal("loginModal");
+}
+
+function openSignupModal() {
+  openModal("signupModal");
+}

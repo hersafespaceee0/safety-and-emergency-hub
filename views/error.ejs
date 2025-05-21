@@ -3,14 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Error</title>
+    <title>Error - Safety & Emergency Hub</title>
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
-    <div class="container">
-      <h2>Error</h2>
-      <p><%= message %></p>
-      <a href="/">Go back</a>
+    <div class="hero-bg">
+      <%- include('partials/header') %>
+      <section class="landing">
+        <div class="landing-text">
+          <h1>Oops, Something Went Wrong</h1>
+          <p>We're sorry for the inconvenience. Let's get you back on track.</p>
+        </div>
+      </section>
+      <main>
+        <section class="section error">
+          <h2>Error</h2>
+          <p>
+            <%= message || 'An unexpected error occurred. Please try again
+            later.' %>
+          </p>
+          <div class="error-actions">
+            <a href="/" class="btn-fill">Back to Home</a>
+            <button class="btn-outline" onclick="window.location.reload()">
+              Retry
+            </button>
+            <a href="mailto:support@safehub.com" class="btn-outline"
+              >Contact Support</a
+            >
+          </div>
+        </section>
+      </main>
     </div>
+    <footer class="footer">
+      <p>© 2025 SafeHub. All rights reserved.</p>
+    </footer>
+    <script src="/js/script.js"></script>
   </body>
 </html>

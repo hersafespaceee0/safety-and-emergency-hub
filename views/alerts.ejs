@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alerts - Safety & Emergency Hub</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <div class="hero-bg">
+    <%- include('partials/header') %>
+    <section class="landing">
+      <div class="landing-text">
+        <h1>Stay Alert, Stay Safe</h1>
+        <p>View and report emergency alerts in your region.</p>
+      </div>
+    </section>
+    <main>
+      <section class="section alerts">
+        <h2>🚨 All Alerts</h2>
+        <form class="filter-form" action="/alerts" method="GET">
+          <label for="severity">Filter by Severity:</label>
+          <select name="severity" id="severity">
+            <option value="">All</option>
+            <option value="high" <%= severity === 'high' ? 'selected' : '' %>>High</option>
+            <option value="medium" <%= severity === 'medium' ? 'selected' : '' %>>Medium</option>
+            <option value="low" <%= severity === 'low' ? 'selected' : '' %>>Low</option>
+          </select>
+          <label for="region_id">Filter by Region:</label>
+          <select name="region_id" id="region_id">
+            <option value="">All</option>
+            <% if (regions && regions.length > 0) { %>
+              <% regions.forEach(region => { %>
+                <option value="<%= region.region_id %>" <%= region_id == region.region_id ? 'selected' : '' %>>
+                  <%= region.region_name %>
+                </option>
+              <% }) %>
+            <% } %>
+          </select>
+          <button type="submit" class="btn-fill">Apply Filters</button>
+        </form>
+        <% if (session && session.user) { %>
+          <form class="alert-form" action="/alerts/add" method="POST">
+            <h3>Report a New Alert</h3>
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="title" placeholder="Enter alert title" required aria-required="true" />
+            <label for="description">Description:</label>
+            <textarea name="description" id="description" placeholder="Describe the alert" required aria-required="true"></textarea>
+            <label for="severity">Severity:</label>
+            <select name="severity" id="severity" required aria-required="true">
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+            <label for="region_id">Region:</label>
+            <select name="region_id" id="region_id" required aria-required="true">
+              <% if (regions && regions.length > 0) { %>
+                <% regions.forEach(region => { %>
+                  <option value="<%= region.region_id %>"><%= region.region_name %></option>
+                <% }) %>
+              <% } else { %>
+                <option value="" disabled>No regions available</option>
+              <% } %>
+            </select>
+            <button type="submit" class="btn-fill">Submit Alert</button>
+          </form>
+        <% } else { %>
+          <p class="auth-prompt">
+            Please <button class="btn-outline" onclick="openLoginModal()">log in</button> or 
+            <button class="btn-fill" onclick="openSignupModal()">sign up</button> to report an alert.
+          </p>
+        <% } %>
+        <div class="alerts-grid">
+          <% if (alerts && alerts.length > 0) { %>
+            <% alerts.forEach(alert => { %>
+              <div class="alert">
+                <strong><%= alert.title %></strong> – <%= alert.description %>
+                <% if (alert.severity) { %>
+                  <span class="severity" style="color: <%= alert.severity === 'high' ? 'red' : alert.severity === 'medium' ? 'orange' : 'yellow' %>;">
+                    (<%= alert.severity %>)
+                  </span>
+                <% } %>
+                <p><small>Posted: <%= new Date(alert.created_at).toLocaleString() %></small></p>
+              </div>
+            <% }) %>
+          <% } else { %>
+            <div class="alert">No active alerts at this time.</div>
+          <% } %>
+        </div>
+      </section>
+    </main>
+  </div>
+  <footer class="footer">
+    <p>© 2025 SafeHub. All rights reserved.</p>
+  </footer>
+  <script src="/js/script.js"></script>
+</body>
+</html>
