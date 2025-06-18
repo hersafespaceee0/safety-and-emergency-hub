@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Safety Tips - Safety & Emergency Hub</title>
   <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .hero-bg{
+      background-image: url(/images/safety\ tips.jpg);
+    }
+  </style>
 </head>
 <body>
   <div class="hero-bg">
@@ -24,8 +29,7 @@
             <option value="">All</option>
             <% if (categories && categories.length > 0) { %>
               <% categories.forEach(cat => { %>
-                <option value="<%= cat %>" <%= category === cat ? 'selected' : '' %>><%= cat %></option>
-              <% }) %>
+                <option value="<%= cat %>" <% if (category === cat) { %>selected<% } %>><%= cat %></option>
             <% } %>
           </select>
           <button type="submit" class="btn-fill">Apply Filter</button>

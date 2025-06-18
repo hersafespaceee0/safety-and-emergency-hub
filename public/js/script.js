@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const menuToggle = document.getElementById("menu-toggle");
-  const closeMenu = document.getElementById("close-menu");
+  const closeMenu = document.getElementById("close-nav");
   const navMenu = document.getElementById("nav-menu");
 
   if (menuToggle && closeMenu && navMenu) {
@@ -48,3 +48,11 @@ function openLoginModal() {
 function openSignupModal() {
   openModal("signupModal");
 }
+// Close modal on outside click
+document.querySelectorAll(".modal").forEach((modal) => {
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+});

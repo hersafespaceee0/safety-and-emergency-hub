@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const mysql = require("mysql");
@@ -6,17 +7,6 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 
 //connection to the db
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "safety & emergency hub",
-});
-db.connect((err) => {
-  if (err) throw err;
-  console.log("Connected to MySQL database!");
-});
-
 const pool = mysql.createPool({
   host: "localhost",
   user: "root",
@@ -32,98 +22,51 @@ app.set("view engine", "ejs");
 
 app.use(
   session({
-    secret: "process.env.SESSION_SECRET",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
   })
 );
 
-app.get("/", (req, res) => {
-  // Fetch latest 3 alerts
-  pool.query(
-    "SELECT alert_id, title, description, severity FROM alerts WHERE status = 'active'LIMIT 3",
-    ["active"], // Only show active alerts
-    (err, alerts) => {
-      if (err) {
-        console.error("Error fetching alerts:", err);
-        return res
-          .status(500)
-          .render("error", { message: "Failed to load alerts" });
-      }
-      // Fetch emergency contacts
-      pool.query(
-        "SELECT contact_id, service_name, phone_number FROM emergency_contacts",
-        (err, contacts) => {
-          if (err) {
-            console.error("Error fetching contacts:", err);
-            return res
-              .status(500)
-              .render("error", { message: "Failed to load contacts" });
-          }
-          // Fetch a random safety tip
-          pool.query(
-            "SELECT tip_id, title, description FROM safety_tips ORDER BY RAND() LIMIT 1",
-            (err, tips) => {
-              if (err) {
-                console.error("Error fetching tips:", err);
-                return res
-                  .status(500)
-                  .render("error", { message: "Failed to load tips" });
-              }
-              res.render("index", {
-                session: req.session,
-                alerts: alerts || [],
-                contacts: contacts || [],
-                tip: tips[0] || { title: "No tips available", description: "" },
-              });
-            }
-          );
-        }
-      );
-    }
-  );
+app.use((req, res, next) => {
+  res.locals.session = req.session || {}; // Make session available in all templates
+  next();
 });
 
 // Set EJS as the view engine
 app.set("view engine", "ejs");
-// routes
-
-app.get("/", (req, res) => {
-  res.render("index", { session: req.session });
-});
 
 // Routes
 app.get("/", (req, res) => {
   pool.query(
-    "SELECT alert_id, title, description, severity, created_at FROM alerts WHERE status = ? ORDER BY created_at DESC LIMIT 3",
+    "SELECT alert_id, title, description, severity FROM alerts WHERE status = ? LIMIT 3",
     ["active"],
     (err, alerts) => {
       if (err) {
         console.error("Error fetching alerts:", err);
-        return res
-          .status(500)
-          .render("error", { message: "Failed to load alerts" });
+        return res.status(500).render("error", {
+          message: "Failed to load alerts",
+        });
       }
       pool.query(
         "SELECT contact_id, service_name, phone_number FROM emergency_contacts",
         (err, contacts) => {
           if (err) {
             console.error("Error fetching contacts:", err);
-            return res
-              .status(500)
-              .render("error", { message: "Failed to load contacts" });
+            return res.status(500).render("error", {
+              message: "Failed to load contacts",
+            });
           }
           pool.query(
             "SELECT tip_id, title, description FROM safety_tips ORDER BY RAND() LIMIT 1",
             (err, tips) => {
               if (err) {
                 console.error("Error fetching tips:", err);
-                return res
-                  .status(500)
-                  .render("error", { message: "Failed to load tips" });
+                return res.status(500).render("error", {
+                  message: "Failed to load tips",
+                });
               }
               res.render("index", {
-                session: req.session,
                 alerts: alerts || [],
                 contacts: contacts || [],
                 tip: tips[0] || { title: "No tips available", description: "" },
@@ -141,7 +84,7 @@ app.get("/alerts", (req, res) => {
   const error = req.session.alertError || null;
   req.session.alertError = null; // Clear error after displaying
   let query =
-    "SELECT alert_id, title, description, severity, created_at FROM alerts WHERE status = ?";
+    "SELECT alert_id, title, description, severity FROM alerts WHERE status = ?";
   let params = ["active"];
 
   if (severity) {
@@ -152,14 +95,14 @@ app.get("/alerts", (req, res) => {
     query += " AND region_id = ?";
     params.push(region_id);
   }
-  query += " ORDER BY created_at DESC";
+  query += " ORDER BY alert_id DESC";
 
   pool.query(query, params, (err, alerts) => {
     if (err) {
-      console.error("Error fetching alerts:", err);
-      return res
-        .status(500)
-        .render("error", { message: "Failed to load alerts" });
+      console.error("Error fetching alerts:", err.stack);
+      return res.status(500).render("error", {
+        message: "Failed to load alerts",
+      });
     }
     pool.query("SELECT region_id, region_name FROM regions", (err, regions) => {
       if (err) {
@@ -256,9 +199,9 @@ app.get("/contacts", (req, res) => {
   pool.query(query, params, (err, contacts) => {
     if (err) {
       console.error("Error fetching contacts:", err);
-      return res
-        .status(500)
-        .render("error", { message: "Failed to load contacts" });
+      return res.status(500).render("error", {
+        message: "Failed to load contacts",
+      });
     }
     pool.query("SELECT region_id, region_name FROM regions", (err, regions) => {
       if (err) {
@@ -290,9 +233,9 @@ app.get("/tips", (req, res) => {
   pool.query(query, params, (err, tips) => {
     if (err) {
       console.error("Error fetching tips:", err);
-      return res
-        .status(500)
-        .render("error", { message: "Failed to load tips" });
+      return res.status(500).render("error", {
+        message: "Failed to load tips",
+      });
     }
     pool.query(
       "SELECT DISTINCT category FROM safety_tips WHERE category IS NOT NULL",
@@ -320,21 +263,21 @@ app.get("/volunteer", (req, res) => {
   pool.query("SELECT region_id, region_name FROM regions", (err, regions) => {
     if (err) {
       console.error("Error fetching regions:", err);
-      return res
-        .status(500)
-        .render("error", { message: "Failed to load regions" });
+      return res.status(500).render("error", {
+        message: "Failed to load regions",
+      });
     }
     pool.query(
-      "SELECT volunteer_id, region_id, status, created_at FROM volunteers",
+      "SELECT v.volunteer_id, v.region_id, v.volunteer_status, v.request_title, v.request_description, r.region_name " +
+        "FROM volunteers v LEFT JOIN regions r ON v.region_id = r.region_id",
       (err, volunteers) => {
         if (err) {
-          console.error("Error fetching volunteers:", err);
+          console.error("Error fetching volunteers:", err.stack);
           return res
             .status(500)
             .render("error", { message: "Failed to load volunteers" });
         }
         res.render("volunteer", {
-          session: req.session,
           regions: regions || [],
           volunteers: volunteers || [],
           error: error,
@@ -349,11 +292,16 @@ app.post("/volunteer/apply", (req, res) => {
     req.session.volunteerError = "Please log in to apply";
     return res.redirect("/volunteer");
   }
-  const { region_id } = req.body;
+  const { request_title, request_description, region_id } = req.body;
 
   // Validation
-  if (!region_id || isNaN(region_id)) {
-    req.session.volunteerError = "Invalid region";
+  if (
+    !request_title ||
+    !request_description ||
+    !region_id ||
+    isNaN(region_id)
+  ) {
+    req.session.volunteerError = "All fields are required";
     return res.redirect("/volunteer");
   }
 
@@ -384,7 +332,7 @@ app.post("/volunteer/apply", (req, res) => {
             return res.redirect("/volunteer");
           }
           pool.query(
-            "INSERT INTO volunteers (user_id, region_id, status, created_at) VALUES (?, ?, ?, NOW())",
+            "INSERT INTO volunteers (user_id, region_id,request_title, request_description, volunteer_status status) VALUES (?, ?, ?, ?,?)",
             [req.session.user.user_id, region_id, "pending"],
             (err) => {
               if (err) {
@@ -408,7 +356,7 @@ app.post("/signup", async (req, res) => {
 
   const query =
     "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)";
-  db.query(query, [username, email, hashedPassword], (err, result) => {
+  pool.query(query, [username, email, hashedPassword], (err, result) => {
     if (err) {
       console.error("Signup error:", err);
       return res.send("Signup failed");
@@ -421,24 +369,30 @@ app.post("/signup", async (req, res) => {
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
 
-  db.query(
+  pool.query(
     "SELECT * FROM users WHERE email = ?",
     [email],
     async (err, results) => {
       if (err) {
         console.error("Login error:", err);
-        return res.send("Login failed");
+        return res.status(500).render("error", { message: "Login failed" });
       }
 
-      if (results.length === 0) return res.send("No user found");
+      if (results.length === 0) {
+        return res.status(401).render("error", { message: "No user found" });
+      }
 
       const user = results[0];
       const match = await bcrypt.compare(password, user.password_hash);
 
-      if (!match) return res.send("Incorrect password");
+      if (!match) {
+        return res
+          .status(401)
+          .render("error", { message: "Incorrect password" });
+      }
 
       req.session.user = {
-        id: user.user_id,
+        user_id: user.user_id,
         username: user.username,
         email: user.email,
       };
@@ -447,13 +401,24 @@ app.post("/login", (req, res) => {
     }
   );
 });
+
 //logout route
 app.post("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       console.error("Logout error:", err);
+      return res.status(500).render("error", { message: "Logout failed" });
     }
     res.redirect("/");
+  });
+});
+
+// Error-handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).render("error", {
+    message: err.message || "Something went wrong",
+    error: process.env.NODE_ENV === "development" ? err : {}, // Show error details in dev mode
   });
 });
 

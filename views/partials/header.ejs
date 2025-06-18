@@ -12,11 +12,14 @@
       <div class="nav-items">
         <a href="/alerts">Alerts</a>
         <a href="/tips">Safety Tips</a>
-        <a href="/contacts">Contact Us</a>
+        <a href="/contacts">Emergency Contacts</a>
         <a href="/volunteer">Volunteers</a>
+        <button class="close-nav" id="close-nav" aria-label="Close menu">
+          Close
+        </button>
       </div>
       <div class="auth-buttons">
-        <% if (session && session.user) { %>
+        <% if (typeof session !== 'undefined' && session && session.user) { %>
         <span class="welcome-msg">Welcome, <%= session.user.username %></span>
         <form action="/logout" method="POST" style="display: inline">
           <button class="btn-outline">Log Out</button>

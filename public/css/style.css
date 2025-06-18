@@ -12,7 +12,7 @@ html {
   color: white;
 }
 .hero-bg {
-  background: url(/images/background\ img1.jpg) no-repeat center center/cover;
+  background: url(/public/images/firefighters.jpg) no-repeat center center/cover;
 
   position: relative;
 }
@@ -67,7 +67,7 @@ html {
 /* Navigation */
 .nav-links {
   display: flex;
-  gap: 1.5rem;
+  gap: 20px;
   flex: 1;
   justify-content: center;
 }
@@ -85,6 +85,7 @@ html {
 
 /* Buttons */
 .auth-buttons {
+  margin-left: 2rem;
   display: flex;
   gap: 1rem;
 }
@@ -291,6 +292,9 @@ main {
   margin-right: 10px;
   font-weight: bold;
 }
+.close-nav {
+  display: none;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -350,23 +354,22 @@ main {
   .nav-links a:hover {
     color: #b91c1c;
   }
-
-  .close-menu {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+  .close-nav {
+    display: none;
     background: none;
     border: none;
     color: white;
-    font-size: 1.5rem;
+    font-size: 0.9rem;
     cursor: pointer;
-    margin-bottom: 1rem;
-    z-index: 1001;
+    padding: 0.5rem 0;
+    text-align: left;
+    width: 100%;
   }
 
-  .close-menu:hover {
-    color: #b91c1c;
+  .nav-links.active .close-nav {
+    display: block;
   }
+
   .section {
     padding: 1rem;
     margin: 0.5rem;

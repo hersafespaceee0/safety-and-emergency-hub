@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Alerts - Safety & Emergency Hub</title>
   <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .hero-bg{
+      background-image: url(/public/images/alerts\ floods.jpg);
+      min-height: 100vh;
+    }
+  </style>
 </head>
 <body>
   <div class="hero-bg">
@@ -80,7 +86,6 @@
                     (<%= alert.severity %>)
                   </span>
                 <% } %>
-                <p><small>Posted: <%= new Date(alert.created_at).toLocaleString() %></small></p>
               </div>
             <% }) %>
           <% } else { %>

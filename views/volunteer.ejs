@@ -5,72 +5,93 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Volunteer</title>
     <link rel="stylesheet" href="/css/style.css" />
+    <style>
+      .hero-bg {
+        background-image: url(/images/volunteerss.jpg);
+      }
+    </style>
   </head>
   <body>
-    <%- include('partials/header') %>
-    <main>
-      <section class="section volunteer">
-        <h2>Volunteer Opportunities</h2>
-        <p>
-          Help your community during emergencies. Submit a request or apply to
-          help.
-        </p>
+    <div class="hero-bg">
+      <%- include('partials/header') %>
+      <main>
+        <section class="section volunteer">
+          <h2>Volunteer Opportunities</h2>
+          <p>
+            Help your community during emergencies. Submit a request or apply to
+            help.
+          </p>
 
-        <% if (session && session.user) { %>
-        <form action="/volunteer" method="POST" class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium">Request Title</label>
-            <input
-              type="text"
-              name="request_title"
-              class="w-full p-2 border rounded"
-              required
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium">Description</label>
-            <textarea
-              name="request_description"
-              class="w-full p-2 border rounded"
-              required
-            ></textarea>
-          </div>
-          <div>
-            <label class="block text-sm font-medium">Region</label>
-            <select name="region_id" class="w-full p-2 border rounded" required>
-              <option value="1">Nairobi</option>
-              <option value="2">Mombasa</option>
-            </select>
-          </div>
-          <button
-            type="submit"
-            class="bg-blue-500 text-white px-4 py-2 rounded"
-          >
-            Submit Request
-          </button>
-        </form>
-        <% } else { %>
-        <p>
-          Please <a href="#" onclick="openModal('loginModal')">log in</a> to
-          submit a volunteer request.
-        </p>
-        <% } %>
-
-        <h3>Open Volunteer Requests</h3>
-        <div class="volunteer-grid">
-          <% if (volunteers && volunteers.length > 0) { %> <%
-          volunteers.forEach(volunteer => { %>
-          <div class="volunteer-card">
-            <strong><%= volunteer.request_title %></strong>
-            <p><%= volunteer.request_description %></p>
-            <p>Region: <%= volunteer.region_name %></p>
-            <p>Status: <%= volunteer.volunteer_status %></p>
-          </div>
-          <% }) %> <% } else { %>
-          <div class="volunteer-card">No open requests at this time.</div>
+          <% if (session && session.user) { %>
+          <form action="/volunteer/apply" method="POST" class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium">Request Title</label>
+              <input
+                type="text"
+                name="request_title"
+                class="w-full p-2 border rounded"
+                required
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Description</label>
+              <textarea
+                name="request_description"
+                class="w-full p-2 border rounded"
+                required
+              ></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Region</label>
+              <select
+                name="region_id"
+                class="w-full p-2 border rounded"
+                required
+              >
+                <% if (regions && regions.length > 0) { %> <%
+                regions.forEach(region => { %>
+                <option value="<%= region.region_id %>">
+                  <%= region.region_name %>
+                </option>
+                <% }) %> <% } else { %>
+                <option value="" disabled>No regions available</option>
+                <% } %>
+              </select>
+            </div>
+            <button
+              type="submit"
+              class="bg-blue-500 text-white px-4 py-2 rounded"
+            >
+              Submit Request
+            </button>
+          </form>
+          <% } else { %>
+          <p>
+            Please <a href="#" onclick="openModal('loginModal')">log in</a> to
+            submit a volunteer request.
+          </p>
           <% } %>
-        </div>
-      </section>
-    </main>
+
+          <h3>Open Volunteer Requests</h3>
+          <div class="volunteer-grid">
+            <% if (volunteers && volunteers.length > 0) { %> <%
+            volunteers.forEach(volunteer => { %>
+            <div class="volunteer-card">
+              <strong><%= volunteer.request_title %></strong>
+              <p><%= volunteer.request_description %></p>
+              <p>Region: <%= volunteer.region_name %></p>
+              <p>Status: <%= volunteer.volunteer_status %></p>
+            </div>
+            <% }) %> <% } else { %>
+            <div class="volunteer-card">No open requests at this time.</div>
+            <% } %>
+          </div>
+        </section>
+      </main>
+      <footer class="footer">
+        <p>© 2025 SafeHub. All rights reserved.</p>
+      </footer>
+    </div>
+    <script src="/js/script.js"></script>
   </body>
 </html>
