@@ -25,8 +25,12 @@
           <button class="btn-outline">Log Out</button>
         </form>
         <% } else { %>
-        <button class="btn-outline" onclick="openLoginModal()">Log In</button>
-        <button class="btn-fill" onclick="openSignupModal()">Sign Up</button>
+        <button class="btn-outline" onclick="openModal('loginModal')">
+          Log In
+        </button>
+        <button class="btn-fill" onclick="openModal('signupModal')">
+          Sign Up
+        </button>
         <% } %>
       </div>
     </nav>

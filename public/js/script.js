@@ -25,29 +25,61 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-function openModal(id) {
-  const modal = document.getElementById(id);
+function openModal(idOrType) {
+  // Handle single modal with login/signup forms (volunteer.html, alerts.html)
+  const authModal = document.getElementById("authModal");
+  if (authModal) {
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+    authModal.style.display = "flex";
+    if (idOrType === "signup") {
+      loginForm.classList.remove("active");
+      signupForm.classList.add("active");
+    } else {
+      signupForm.classList.remove("active");
+      loginForm.classList.add("active");
+    }
+    return;
+  }
+
+  // Handle separate modals (homepage)
+  const modal = document.getElementById(idOrType);
   if (modal) {
     modal.style.display = "flex";
   } else {
-    window.location.href = "/"; // Redirect to homepage if modal not found
+    window.location.href = "/";
   }
 }
 
 function closeModal(id) {
+  // Handle single modal (volunteer.html, alerts.html)
+  const authModal = document.getElementById("authModal");
+  if (authModal && !id) {
+    authModal.style.display = "none";
+    return;
+  }
+
+  // Handle separate modals (homepage)
   const modal = document.getElementById(id);
   if (modal) {
     modal.style.display = "none";
   }
 }
 
-function openLoginModal() {
-  openModal("loginModal");
+function toggleForm(formType) {
+  const loginForm = document.getElementById("loginForm");
+  const signupForm = document.getElementById("signupForm");
+  if (loginForm && signupForm) {
+    if (formType === "signup") {
+      loginForm.classList.remove("active");
+      signupForm.classList.add("active");
+    } else {
+      signupForm.classList.remove("active");
+      loginForm.classList.add("active");
+    }
+  }
 }
 
-function openSignupModal() {
-  openModal("signupModal");
-}
 // Close modal on outside click
 document.querySelectorAll(".modal").forEach((modal) => {
   modal.addEventListener("click", (e) => {

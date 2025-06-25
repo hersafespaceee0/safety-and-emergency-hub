@@ -5,6 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Emergency Contacts - Safety & Emergency Hub</title>
   <link rel="stylesheet" href="/css/style.css" />
+  <style>
+    .hero-bg{
+      background-image:url(/images/hero-building-ff.jpg);
+      min-height: 100vh;
+    }
+    .filter-form {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.filter-form select,
+.filter-form button {
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.call-now {
+  display: inline-block;
+  margin-top: 0.5rem;
+  background-color: rgb(36, 36, 201);
+  color: white;
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  
+}
+
+
+
+.contacts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.contact-card {
+  background-color: #fff3e057;
+  padding: 1rem;
+  border-left: 4px solid #1976d2;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+  </style>
 </head>
 <body>
   <div class="hero-bg">

@@ -37,12 +37,9 @@ html {
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.3); /* transparent dark */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25); /* deeper shadow */
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
   z-index: 1000;
   background-color: rgba(255, 255, 255, 0.1); /* very transparent */
-  backdrop-filter: blur(10px); /* actual blur */
   -webkit-backdrop-filter: blur(10px); /* Safari support */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
@@ -67,29 +64,41 @@ html {
 /* Navigation */
 .nav-links {
   display: flex;
-  gap: 20px;
-  flex: 1;
+  align-items: center;
+  padding-left: 100px;
+  flex-grow: 0;
+}
+.nav-items {
+  display: flex;
   justify-content: center;
+  gap: 1rem;
+  flex-grow: 0;
+  padding-right: 200px;
 }
 
-.nav-links a {
+.nav-items a {
   text-decoration: none;
   color: white;
   font-weight: 500;
   transition: color 0.3s;
 }
 
-.nav-links a:hover {
+.nav-items a:hover {
   color: #dc2626;
 }
 
 /* Buttons */
 .auth-buttons {
-  margin-left: 2rem;
+  margin-left: auto;
   display: flex;
   gap: 1rem;
 }
-
+.auth-buttons button {
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
 .btn-outline {
   padding: 0.5rem 1rem;
   border: 2px solid #dc2626;
@@ -117,7 +126,12 @@ html {
 .btn-fill:hover {
   background-color: #b91c1c;
 }
-
+.welcome-msg {
+  color: white;
+  font-size: 1rem;
+  margin-right: 1rem;
+  align-self: center;
+}
 /* Landing Section */
 .landing {
   display: flex;

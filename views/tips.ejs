@@ -9,6 +9,19 @@
     .hero-bg{
       background-image: url(/images/safety\ tips.jpg);
     }
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.tip {
+  background-color: #fff3e057;
+  padding: 1rem;
+  border-left: 4px solid #4caf50;
+  border-radius: 6px;
+}
+
   </style>
 </head>
 <body>
@@ -30,6 +43,7 @@
             <% if (categories && categories.length > 0) { %>
               <% categories.forEach(cat => { %>
                 <option value="<%= cat %>" <% if (category === cat) { %>selected<% } %>><%= cat %></option>
+                <% }) %>
             <% } %>
           </select>
           <button type="submit" class="btn-fill">Apply Filter</button>
